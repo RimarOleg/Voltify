@@ -1,0 +1,101 @@
+/* Загальні стилі */
+body {
+    background-color: #3e445b;
+    font-family: 'Segoe UI', sans-serif;
+    margin: 0;
+    color: white;
+}
+
+.parent {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    grid-template-rows: 100px auto;
+    grid-template-areas: 
+        "logo icons"
+        "content content";
+    min-height: 100vh;
+    padding: 0 0px;
+}
+
+/* Шапка */
+.logo-area { grid-area: logo; align-self: center; }
+.logo-area h1 { font-size: 48px; margin: 0; }
+
+.icons-area { grid-area: icons; justify-self: end; align-self: center; }
+.icons { font-size: 30px; display: flex; gap: 20px; }
+
+/* Білий контейнер */
+.main-content {
+    grid-area: content;
+    background-color: white;
+    border-radius: 50px 50px 0 0;
+    color: black;
+    display: grid;
+    grid-template-columns: 1fr 1fr; /* Ділимо контент на 2 колонки */
+    gap: 40px;
+    padding: 60px;
+}
+
+/* Стилі для лівої та правої колонок-карток */
+.info-section, .preview-section {
+    border: 2px solid #8e94af;
+    border-radius: 25px;
+    padding: 30px;
+    text-align: center;
+}
+
+/* Сітка для полів вводу (ліворуч) */
+.form-grid {
+    display: grid;
+    grid-template-columns: 1fr 120px;
+    gap: 15px;
+    margin-top: 20px;
+}
+
+.label {
+    border: 2px solid #4a4e69;
+    border-radius: 12px;
+    padding: 10px;
+    text-align: left;
+}
+
+.input {
+    border: 2px solid #4a4e69;
+    border-radius: 12px;
+    background-color: #fff;
+}
+
+/* Права частина: Картка з фото */
+.image-box {
+    border: 2px solid #8e94af;
+    border-radius: 20px;
+    padding: 10px;
+    margin: 20px 0;
+}
+
+.image-box img {
+    width: 100%;
+    border-radius: 10px;
+}
+
+/* Теги під фото */
+.tags-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 10px;
+}
+
+.tag {
+    background-color: #9da1d1;
+    color: white;
+    padding: 10px;
+    border-radius: 10px;
+    font-size: 14px;
+}
+
+/* Адаптація під малі екрани */
+@media (max-width: 900px) {
+    .main-content {
+        grid-template-columns: 1fr;
+    }
+}
