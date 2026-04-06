@@ -12,16 +12,16 @@ body{
     grid-row-gap: 0px;
     min-height: 100vh;
 }
-.div1{ grid-area: 1 / 1 / 7 / 5; }
+.div1{ grid-area: 1/1/7/5;}
 .div2{
-    grid-area: 2 / 1 / 7 / 5;
+    grid-area: 2/1/7/5;
     background-color: white;
     border-top-left-radius: 60px;
     border-top-right-radius: 60px;
     z-index: 0;
 }
 .div3{
-    grid-area: 1 / 1 / 2 / 2;
+    grid-area: 1/1/2/2;
     color: white;
     display: flex;
     align-items: center;
@@ -34,7 +34,7 @@ body{
     color: white;
 }
 .div4{
-    grid-area: 1 / 4 / 2 / 5;
+    grid-area: 1/4/2/5;
     display: flex;
     align-items: center;
     justify-content: flex-end;
@@ -48,7 +48,7 @@ body{
     filter: brightness(0) invert(1); /* Робимо іконки білими */
 }
 .div5{
-    grid-area: 3 / 1 / 6 / 3;
+    grid-area: 3/1/6/3;
     margin: 0 5% 5% 10%;
     padding: 30px;
     border: 4px solid #6A6A89;
@@ -56,7 +56,7 @@ body{
     z-index: 1;
 }
 .div6{
-    grid-area: 3 / 3 / 6 / 5;
+    grid-area: 3/3/6/5;
     margin: 0 10% 5% 5%;
     padding: 30px;
     border: 4px solid #6A6A89;
@@ -145,18 +145,12 @@ h2{
     text-align: center;
     font-size: 0.9vw;
 }
-
-
-
-
-/* Стилі для кнопок керування */
-.admin-controls {
+.admin-controls{
     display: flex;
     gap: 10px;
     margin-top: 20px;
 }
-
-.btn-edit, .btn-delete, .btn-back {
+.btn-edit, .btn-delete, .btn-back{
     flex: 1;
     padding: 12px !important;
     border-radius: 12px;
@@ -167,21 +161,19 @@ h2{
     color: white;
 }
 
-.btn-edit {
-    background-color: #4CAF50; /* Зелений для редагування */
+.btn-edit{
+    background-color: #4CAF50; 
 }
 
-.btn-delete {
-    background-color: #E53935; /* Червоний для видалення */
+.btn-delete{
+    background-color: #E53935; 
 }
-
-.btn-back {
+.btn-back{
     background-color: #6A6A89;
     width: 100%;
     margin-top: 10px;
 }
-
-.btn-edit:hover, .btn-delete:hover, .btn-back:hover {
+.btn-edit:hover, .btn-delete:hover, .btn-back:hover{
     transform: scale(1.03);
     filter: brightness(1.1);
 }

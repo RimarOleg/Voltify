@@ -1,34 +1,3 @@
 [
-  {
-    "login": "Олег",
-    "password": "123"
-  },
-  {
-    "login": "Маряна",
-    "password": "234"
-  },
-  {
-    "login": "Олег1",
-    "password": "1234"
-  },
-  {
-    "login": "Vfhzyf",
-    "password": "345"
-  },
-  {
-    "login": "Мар'яна",
-    "password": "567"
-  },
-  {
-    "login": "Ярош",
-    "password": "567"
-  },
-  {
-    "login": "Андрій",
-    "password": "5555"
-  },
-  {
-    "login": "Назар ",
-    "password": "789"
-  }
+    
 ]
