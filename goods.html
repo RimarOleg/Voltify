@@ -3,53 +3,55 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Voltify - Товар</title>
+    <title>Voltify - Перегляд товару</title>
     <link rel="stylesheet" href="goods.css">
 </head>
 <body>
     <div class="parent">
-        <div class="div1 logo-area">
-            <h1>Voltify</h1>
+        <div class="div1"></div>
+        <div class="div2"></div>
+        <div class="div3">
+            <a href="index.html"><h1>Voltify</h1></a>
         </div>
-        
-        <div class="div2 icons-area">
-            <div class="icons">
-                <span>👤</span>
-                <span>🛒</span>
-                <span>⚙️</span>
-            </div>
+        <div class="div4">
+            <img class='entrens' src="images/image copy 3.png" alt="">
+            <img src="images/data-management.png" alt="">
         </div>
-
-        <div class="div3 main-content">
-            
+        <div class="div5">
             <div class="info-section">
                 <h2>Інформація про товар</h2>
                 <div class="form-grid">
-                    <div class="label">Назва пристрою</div> <div class="input"></div>
-                    <div class="label">Гарантія</div> <div class="input"></div>
-                    <div class="label">Рік випуску</div> <div class="input"></div>
-                    <div class="label">Бренд</div> <div class="input"></div>
-                    <div class="label">Ціна</div> <div class="input"></div>
-                    <div class="label">Кількість</div> <div class="input"></div>
+                    <div class="label">Назва пристрою</div> <div class="input" id="g-name">---</div>
+                    <div class="label">Гарантія</div> <div class="input" id="g-warranty">---</div>
+                    <div class="label">Рік випуску</div> <div class="input" id="g-year">---</div>
+                    <div class="label">Бренд</div> <div class="input" id="g-brand">---</div>
+                    <div class="label">Ціна</div> <div class="input" id="g-price">---</div>
+                    <div class="label">Кількість</div> <div class="input" id="g-count">---</div>
+                </div>
+
+                <div class="admin-controls">
+                    <button class="btn-edit" onclick="editProduct()">Редагувати</button>
+                    <button class="btn-delete" onclick="deleteProduct()">Видалити</button>
+                </div>
+                
+                <button class="btn-back" onclick="window.location.href='catalog.html'">До каталогу</button>
+            </div>
+        </div>
+        <div class="div6">
+            <h2>Приклад товару</h2>
+            <div class="product-card">
+                <div class="image-box">
+                    <img id="g-img" src="" alt="Товар">
+                </div>
+                <div class="tags-grid">
+                    <div class="tag" id="t-year">Рік: ---</div>
+                    <div class="tag" id="t-warranty">Гарантія: ---</div>
+                    <div class="tag" id="t-count">Кількість: ---</div>
+                    <div class="tag" id="t-price">Ціна: ---</div>
                 </div>
             </div>
-
-            <div class="preview-section">
-                <h2>Приклад товару</h2>
-                <div class="product-card">
-                    <div class="image-box">
-                        <img src="acer_nitro.png" alt="Acer Nitro">
-                    </div>
-                    <div class="tags-grid">
-                        <div class="tag">Рік: 2025</div>
-                        <div class="tag">Гарантія: 1 рік</div>
-                        <div class="tag">Кількість: 15</div>
-                        <div class="tag">Ціна: $1,299</div>
-                    </div>
-                </div>
-            </div>
-
         </div>
     </div>
+    <script src="goods.js"></script>
 </body>
 </html>

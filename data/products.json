@@ -1,0 +1,92 @@
+[
+  {
+    "id": 1775308438864,
+    "name": "Acer",
+    "categoryID": 2,
+    "price": 1200,
+    "warranty": 1,
+    "year": 2025,
+    "quantity": 13,
+    "image": "/goods-images/Laptop.png"
+  },
+  {
+    "id": 1775308677182,
+    "name": "12",
+    "categoryID": 2,
+    "price": 213,
+    "warranty": 23,
+    "year": 1213,
+    "quantity": 12333,
+    "image": "/goods-images/Laptop.png"
+  },
+  {
+    "id": 1775309169374,
+    "name": "Монік",
+    "categoryID": 6,
+    "price": 500000,
+    "warranty": 1,
+    "year": 2025,
+    "quantity": 15,
+    "image": "http://localhost:3000/goods-images/Monitor.png"
+  },
+  {
+    "id": 1775309220519,
+    "name": "Attack Shark",
+    "categoryID": 4,
+    "price": 1300,
+    "warranty": 1,
+    "year": 2024,
+    "quantity": 50,
+    "image": "/goods-images/Mouse.png"
+  },
+  {
+    "id": 1775310469324,
+    "name": "AirPods",
+    "categoryID": 5,
+    "price": 1222,
+    "warranty": 1,
+    "year": 2023,
+    "quantity": 12,
+    "image": "/goods-images/Air Pods.png"
+  },
+  {
+    "id": 1775333337744,
+    "name": "Підставка",
+    "categoryID": 7,
+    "price": 1000,
+    "warranty": 1,
+    "year": 2024,
+    "quantity": 15,
+    "image": "/goods-images/Under.png"
+  },
+  {
+    "id": 1775333402894,
+    "name": "Soundcore",
+    "categoryID": 5,
+    "price": 2500,
+    "warranty": 1,
+    "year": 2025,
+    "quantity": 10,
+    "image": "/goods-images/Soundcore.png"
+  },
+  {
+    "id": 1775463879888,
+    "name": "Attack Shark x11",
+    "categoryID": 4,
+    "price": 1400,
+    "warranty": 2,
+    "year": 2025,
+    "quantity": 20,
+    "image": "/goods-images/Mouse.png"
+  },
+  {
+    "id": 1775464298385,
+    "name": "JPL",
+    "categoryID": 5,
+    "price": 1500,
+    "warranty": 1,
+    "year": 2023,
+    "quantity": 13,
+    "image": "/goods-images/JPL.png"
+  }
+]
