@@ -13,11 +13,11 @@
     "id": 1775309169374,
     "name": "Монітор ігровий MSI MAG 255F E20",
     "categoryID": 6,
-    "price": 5399,
+    "price": 10000,
     "warranty": 2,
     "year": 2025,
     "quantity": 15,
-    "image": "/goods-images/MSI MAG.png"
+    "image": "http://localhost:3000/goods-images/MSI%20MAG.png"
   },
   {
     "id": 1775309220519,
@@ -27,7 +27,7 @@
     "warranty": 1,
     "year": 2025,
     "quantity": 50,
-    "image": "/goods-images/ATTACK SHARK R11 ULTRA.png"
+    "image": "/goods-images/Знімок екрана 2026-04-06 193746.png"
   },
   {
     "id": 1775333337744,
@@ -117,6 +117,6 @@
     "warranty": 1,
     "year": 2025,
     "quantity": 8,
-    "image": "/goods-images/GamePro CP680.png"
+    "image": "/goods-images/Знімок екрана 2026-04-06 194304.png"
   }
 ]

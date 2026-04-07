@@ -1,0 +1,37 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Contacts</title>
+    <link rel="stylesheet" href="contacts.css">
+</head>
+<body>
+    <header>
+        <a href="index.html">
+            <div class="div3">
+                <h1>Voltify</h1>
+            </div>
+        </a>
+        <div class="div4">
+            <img src="images/data-management.png" alt="">
+        </div>
+    </header>    
+    <div class="header"></div>
+    <div class="card">
+    <h3>Контактна форма</h3>
+    <p class="demo-p">Заповніть форму нижче, щоб залишити повідомлення</p>
+    <div id="error-message" style="color: red; display: none; margin-bottom: 10px;"></div>
+    <form id="contactForm" class="contact-form">
+        <label>Ім'я</label>
+        <input type="text" id="name" name="name" placeholder="Ваше ім'я" required>
+        <label>Email</label>
+        <input type="email" id="email" name="email" placeholder="Email" required>
+        <label>Повідомлення</label>
+        <textarea id="message" name="message" rows="6" placeholder="Ваше повідомлення" required></textarea>
+        <button type="submit">Надіслати</button>
+    </form>
+    </div>
+    <script src="contacts.js"></script>
+</body>
+</html>
