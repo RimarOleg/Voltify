@@ -14,5 +14,9 @@
   {
     "login": "Андрій",
     "password": "555"
+  },
+  {
+    "login": "admin",
+    "password": "1234"
   }
 ]

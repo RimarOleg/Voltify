@@ -1,6 +1,7 @@
-document.addEventListener('DOMContentLoaded',()=>{
-    const registrationForm = document.querySelector('form');
-    registrationForm.addEventListener('submit', async (e)=>{
+document.addEventListener('DOMContentLoaded', ()=>{
+    const registrationForm=document.querySelector('form');
+    if(!registrationForm)return; 
+    registrationForm.addEventListener('submit', async(e)=>{
         e.preventDefault();
         const loginInput=document.querySelector('input[name="login"]').value;
         const passwordInput=document.querySelector('input[name="password"]').value;
@@ -12,10 +13,13 @@ document.addEventListener('DOMContentLoaded',()=>{
             });
             const result=await response.json();
             if(response.ok && result.success){
-                window.location.href = '/dashboard';
+                localStorage.clear();
+                localStorage.setItem('userRole', result.role); 
+                localStorage.setItem('isLoggedIn', 'true');
+                window.location.href='/dashboard';
             } 
             else{
-                alert("Цей логін уже зайнятий! Будь ласка, скористайтеся входом.");
+                alert(result.message || "Цей логін уже зайнятий!");
             }
         } 
         catch(error){

@@ -46,21 +46,22 @@ app.post('/register', (req, res)=>{
     const{login, password}=req.body;
     let users=readJSON(usersFile);
     if(users.find(u=>u.login===login)){
-        return res.status(400).json({ success: false, message: "Цей користувач уже існує" });
+        return res.status(400).json({success: false, message: "Цей користувач уже існує"});
     }
     users.push({login, password});
     writeJSON(usersFile, users);
-    res.json({success: true});
+    const role=(login==='admin')?'admin':'user';
+    res.json({ success: true, role: role });
 });
 app.post('/login', (req, res)=>{
-    const{login, password}=req.body;
+    const {login, password}=req.body;
     const users=readJSON(usersFile);
-    const user=users.find(u=>u.login === login && u.password === password);
+    const user=users.find(u=>u.login===login && u.password===password);
     if(user){
-        res.json({success: true});
-    } 
-    else{
-        res.status(401).json({success: false, message: "Невірний логін або пароль"});
+        const role=(login==='admin')?'admin':'user';
+        res.json({ success: true, role: role });
+    } else {
+        res.status(401).json({ success: false, message: "Невірний логін або пароль" });
     }
 });
 app.get('/get-products', (req, res)=>res.json(readJSON(productsFile)));

@@ -1,4 +1,9 @@
 document.addEventListener('DOMContentLoaded',()=>{
+    const role=localStorage.getItem('userRole');
+    const adminControls=document.querySelector('.admin-controls');
+    if(role!=='admin' && adminControls){
+        adminControls.style.display='none';
+    }
     const data=localStorage.getItem('selectedProduct');
     if(!data){
         window.location.href='catalog.html';
@@ -16,11 +21,11 @@ document.addEventListener('DOMContentLoaded',()=>{
         if(n10>10 && n10<20) return n+" років";
         if(n1>1 && n1<5) return n+" роки";
         if(n1===1) return n+" рік";
-        return n + " років";
+        return n+" років";
     };
     const setT=(id, text)=>{
         const el=document.getElementById(id);
-        if(el)el.textContent=text;
+        if(el) el.textContent=text;
     };
     setT('g-name', product.name);
     setT('g-warranty', formatWarranty(product.warranty));
@@ -29,7 +34,9 @@ document.addEventListener('DOMContentLoaded',()=>{
     setT('g-price', `${product.price} грн`);
     setT('g-count', `${product.quantity} шт.`);
     const gImg=document.getElementById('g-img');
-    if(gImg)gImg.src=product.image;
+    if(gImg){
+        gImg.src=product.image.startsWith('data:')?product.image:`/goods-images/${product.image}`;
+    }
     setT('t-year', `Рік: ${product.year}`);
     setT('t-warranty', `Гарантія: ${formatWarranty(product.warranty)}`);
     setT('t-count', `Кількість: ${product.quantity}`);
@@ -40,8 +47,8 @@ async function deleteProduct(){
     if(!dataStr)return;
     const data=JSON.parse(dataStr);
     if(confirm(`Видалити товар "${data.name}"?`)){
-        try {
-            const response=await fetch(`/api/delete-product/${Number(data.id)}`, {
+        try{
+            const response=await fetch(`/api/delete-product/${Number(data.id)}`,{
                 method: 'DELETE'
             });
             if(response.ok){
@@ -59,6 +66,6 @@ async function deleteProduct(){
         }
     }
 }
-function editProduct() {
-    window.location.href = 'editing.html?edit=true';
+function editProduct(){
+    window.location.href='editing.html?edit=true';
 }

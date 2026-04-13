@@ -45,10 +45,11 @@ function renderProducts(list){
     container.innerHTML=list.map((p, i)=>{
         const gridClass=(i<8)?`div${i+8}`:`div15`;
         const autoStyle=(i>=8)?'grid-area: auto; grid-row: auto; grid-column: auto;':'';
+        const imgSrc = p.image.startsWith('data:') ? p.image : `/goods-images/${p.image}`;
         return `
             <div class="${gridClass}" onclick='openProduct(${JSON.stringify(p).replace(/'/g, "&apos;")})' 
                  style="${autoStyle} cursor: pointer; transition: transform 0.3s ease;">
-                <img src="${p.image}" alt="${p.name}" onerror="this.src='images/placeholder.png'" style="width: 150px; height: auto;">
+                <img src="${imgSrc}" alt="${p.name}" onerror="this.src='images/placeholder.png'" style="width: 150px; height: auto;">
                 <p><strong>${p.name}</strong></p>
                 <p>${p.price} грн</p>
             </div>
@@ -56,6 +57,7 @@ function renderProducts(list){
     }).join('');
 }
 function openProduct(product){
+    const role=localStorage.getItem('userRole');
     localStorage.setItem('selectedProduct', JSON.stringify(product));
     window.location.href='goods.html';
 }
