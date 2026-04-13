@@ -3,20 +3,22 @@ let allCategories=[];
 let currentCategoryId=1;
 async function init(){
     try{
-        const[prodRes, catRes]=await Promise.all([
+        const [prodRes, catRes]=await Promise.all([
             fetch('/get-products?v='+Date.now()),
             fetch('/get-categories?v='+Date.now())
         ]);
         allProducts=await prodRes.json();
         allCategories=await catRes.json();
+        if(!Array.isArray(allProducts)) allProducts=[];
+        if(!Array.isArray(allCategories)) allCategories=[];
         renderCategories();
         const urlParams=new URLSearchParams(window.location.search);
         const searchQuery=urlParams.get('search');
         if(searchQuery){
             const inputField=document.getElementById('searchInput');
-            if(inputField)inputField.value=searchQuery;
+            if(inputField) inputField.value=searchQuery;
             applyFilters();
-        } 
+        }
         else{
             renderProducts(allProducts);
         }
@@ -24,13 +26,16 @@ async function init(){
     } 
     catch(e){
         console.error("Помилка завантаження:", e);
+        const container=document.getElementById('catalog-container');
+        if(container) container.innerHTML="<h3>Помилка зв'язку з сервером ❌</h3>";
     }
 }
 function applyFilters(){
-    const searchText=document.getElementById('searchInput').value.toLowerCase();
+    const searchInput=document.getElementById('searchInput');
+    const searchText=searchInput?searchInput.value.toLowerCase().trim() : "";
     const filtered=allProducts.filter(p=>{
         const matchesText=p.name.toLowerCase().includes(searchText);
-        const matchesCategory=(currentCategoryId===1)||(String(p.categoryID)===String(currentCategoryId));
+        const matchesCategory=(Number(currentCategoryId)=== 1) || (Number(p.categoryID)===Number(currentCategoryId));
         return matchesText && matchesCategory;
     });
     renderProducts(filtered);
@@ -45,7 +50,7 @@ function renderProducts(list){
     container.innerHTML=list.map((p, i)=>{
         const gridClass=(i<8)?`div${i+8}`:`div15`;
         const autoStyle=(i>=8)?'grid-area: auto; grid-row: auto; grid-column: auto;':'';
-        const imgSrc = p.image.startsWith('data:') ? p.image : `/goods-images/${p.image}`;
+        const imgSrc=(p.image && p.image.startsWith('data:'))?p.image:`/goods-images/${p.image}`;
         return `
             <div class="${gridClass}" onclick='openProduct(${JSON.stringify(p).replace(/'/g, "&apos;")})' 
                  style="${autoStyle} cursor: pointer; transition: transform 0.3s ease;">
@@ -57,14 +62,13 @@ function renderProducts(list){
     }).join('');
 }
 function openProduct(product){
-    const role=localStorage.getItem('userRole');
     localStorage.setItem('selectedProduct', JSON.stringify(product));
     window.location.href='goods.html';
 }
 function renderCategories(){
     const menu=document.getElementById('catalogMenu');
     if(!menu)return;
-    menu.innerHTML=allCategories.map(cat => 
+    menu.innerHTML=allCategories.map(cat=> 
         `<a href="#" onclick="filterByCat(event, ${cat.id})">${cat.name}</a>`
     ).join('');
 }
@@ -76,7 +80,7 @@ function filterByCat(e, id){
 }
 document.getElementById('catalogBtn')?.addEventListener('click', (e)=>{
     e.stopPropagation();
-    document.getElementById('catalogMenu').classList.toggle('show');
+    document.getElementById('catalogMenu')?.classList.toggle('show');
 });
 document.addEventListener('click', ()=>{
     document.getElementById('catalogMenu')?.classList.remove('show');
