@@ -3,7 +3,7 @@ body{
     margin: 0;
     padding: 0;
     font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-    background-color: #4b4e6d; /* Темно-синій фон з макету */
+    background-color: #4b4e6d; 
     height: 100vh;
     display: flex;
     justify-content: center;
@@ -13,7 +13,7 @@ body{
 .container{
     text-align: center;
     width: 100%;
-    max-width: 400px;
+    max-width: 25%;
 }
 .logo{
     color: white;
@@ -48,7 +48,7 @@ body{
     padding: 12px;
     border: 2px solid #6c708f;
     border-radius: 12px;
-    box-sizing: border-box; /* Щоб padding не розширював поле */
+    box-sizing: border-box; 
     outline: none;
     transition: border-color 0.3s;
 }

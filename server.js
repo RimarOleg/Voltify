@@ -42,6 +42,7 @@ app.get('/dashboard', (req, res)=>res.sendFile(path.join(__dirname, 'index.html'
 app.get('/catalog-page', (req, res)=>res.sendFile(path.join(__dirname, 'catalog.html')));
 app.get('/editing', (req, res)=>res.sendFile(path.join(__dirname, 'editing.html')));
 app.get('/goods', (req, res)=>res.sendFile(path.join(__dirname, 'goods.html')));
+app.get('/report', (req, res)=>res.sendFile(path.join(__dirname, 'report.html')));
 app.post('/register', (req, res)=>{
     const{login, password}=req.body;
     let users=readJSON(usersFile);

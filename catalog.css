@@ -3,27 +3,36 @@ body{
     font-family: 'Times New Roman', Times, serif;
     margin: 0;
 }
+
 .parent{
     display: grid;
     grid-template-columns: repeat(4, 1fr);
-    grid-template-rows: 7vw repeat(7, auto);
+    grid-template-rows: auto auto 1fr auto;
+    min-height: 110vh;
     grid-column-gap: 0px;
     grid-row-gap: 0px;
 }
+
 .div1{grid-area: 1/1/8/5;}
-.div2{grid-area: 2/1/8/5;
+.div2 {
+    grid-area: 2 / 1 / -1 / 5;
     background-color: white;
     border-top-left-radius: 60px;
     border-top-right-radius: 60px;
+    height: auto;
+    min-height: 100vh;
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+    padding-bottom: 50px;
 }
 .div3{grid-area: 1/1/2/2;
-    color: white; 
+    color: white;
     display: flex;
-    flex-direction: row; 
+    flex-direction: row;
     align-items: center;
     font-size: 1.4vw;
     margin-left: 15%;
-    
 }
 .div3 a{
     text-decoration: none;
@@ -40,19 +49,20 @@ body{
     height: auto;
     }
 }
-.div5{grid-area: 2/2/3/4;
+.div5{grid-area: 2/3/3/5;
     margin-left: 40px;
 }
 .div5 button{
     background-color: #6A6A89;
     border: none;
     color: white;
-    padding: 2% 4%; 
-    font-size: 1vw; 
+    padding: 2% 4%;
+    font-size: 1vw;
     border-radius: 5px;
     width: 16%;
     transition: transform 0.2s ease-in-out;
     margin-top: 5%;
+    margin-right: 5%;
 }
 .div5 button:hover{
     cursor: pointer;
@@ -66,23 +76,10 @@ body{
     background-color: #A5A5BD;
     border: none;
     color: white;
-    padding: 2% 4%; 
-    font-size: 1vw; 
+    padding: 1% 2%;
+    font-size: 1vw;
     border-radius: 5px;
-    width: 50%;
-}
-.div6{grid-area: 2/4/3/5;
-    display: flex;
-    flex-direction: row;
-    align-items: center;
-    justify-content: right;
-    margin-right: 15%;
-    img{
-    cursor: pointer;
-    width: 20%;
-    height: auto;
-    margin-top: 5%;
-    }
+    width: 30%;
 }
 .div7{grid-area: 3/1/4/2}
 .div7 h2{
@@ -129,12 +126,15 @@ body{
 p{
     font-size: 14px;
 }
-.div16{grid-area: 2/1/3/2;
+.div16{
+    grid-area: 2/1/3/3; 
     margin-left: 40px;
     display: flex;
-    flex-direction: row;
-    align-items: center;
-    justify-content: left;
+    flex-direction: row;   
+    align-items: center;      
+    justify-content: flex-start;
+    gap: 20px;                
+    position: relative;
 }
 .div16 button{
     display: flex;
@@ -144,13 +144,13 @@ p{
     background-color: #6A6A89;
     border: none;
     color: white;
-    padding: 12px 20px; 
-    font-size: 16px; 
-    border-radius: 5px;
-    width: 50%;
+    padding: 20px 15px; 
+    font-size: 18px;    
+    border-radius: 8px;
+    width: 15%;         
     transition: transform 0.2s ease-in-out;
-    margin-top: 5%;
-    gap: 5%;
+    margin-top: 4%;
+    gap: 10px;          
 }
 .div16 button:hover{
     cursor: pointer;
@@ -165,14 +165,14 @@ p{
     height: auto;
 }
 .div16{
-    position: relative; 
+    position: relative;
 }
 .catalog-content{
-    display: none; 
+    display: none;
     position: absolute;
-    top: 100%; 
+    top: 100%;
     left: 0;
-    background-color: #6A6A89; 
+    background-color: #6A6A89;
     min-width: 200px;
     box-shadow: 0px 8px 16px rgba(0,0,0,0.2);
     z-index: 100;
@@ -199,19 +199,167 @@ p{
     from{ opacity: 0; transform: translateY(-10px);}
     to{ opacity: 1; transform: translateY(0);}
 }
-.products-grid {
+.products-grid{
     display: grid;
-    grid-template-columns: repeat(auto-fill, minmax(200px, 1fr)); /* Автоматичні колонки */
+    grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
     gap: 20px;
     padding: 20px;
-    grid-column: 1 / -1; /* Щоб займало всю ширину, якщо ти в CSS Grid */
+    grid-column: 1 / -1;
 }
-.product-item {
+.product-item{
     border: 1px solid #ddd;
     padding: 10px;
     text-align: center;
 }
-.product-item img {
+.product-item img{
     max-width: 100%;
     height: auto;
+}
+.product-card {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: space-between;
+    border: 5px solid #8482a0;
+    border-radius: 25px;
+    padding: 20px;
+    background-color: #fff;
+    text-align: center;
+    min-height: 250px;
+    transition: transform 0.3s ease-in-out;
+    cursor: pointer;
+    margin: 15px;
+}
+.product-card:hover{
+    transform: scale(1.05);
+}
+.product-card img{
+    width: 150px;
+    height: auto;
+
+}
+#catalog-container{
+    display: grid;
+    grid-template-columns: repeat(4, 1fr); 
+    gap: 10px;
+    padding: 40px;
+    grid-column: 1 / 5; 
+    z-index: 2;
+    position: relative;
+}
+.price-filter-sidebar{
+    margin-top: 0;            
+    padding: 3px 8px;
+    background: #f4f4f9;
+    border-radius: 12px;
+    border: 1px solid #e1e1e8;
+    display: flex;            
+    align-items: center;
+    gap: 15px;
+    margin-left: 5%;  
+    margin-top: 4%;        
+}
+.price-filter-sidebar p{
+    font-size: 2.8vh;         
+    white-space: nowrap;
+    text-align: center;     
+}
+.price-inputs-row{
+    display: flex;
+    align-items: center;
+    gap: 8px;
+}
+.price-inputs-row input{
+    width: 70px;
+    padding: 8px;
+    border: 1px solid #ccc;
+    border-radius: 6px;
+    outline: none;
+    text-align: center;
+}
+.no-arrows::-webkit-outer-spin-button,
+.no-arrows::-webkit-inner-spin-button {
+    -webkit-appearance: none;
+    margin: 0;
+}
+.no-arrows {
+    -moz-appearance: textfield; 
+}
+footer{
+    background-color: #3C3C4F;
+    color: white;
+    padding: 4% 8%;
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-start;
+    font-family: 'Times New Roman', Times, serif;
+    gap: 15%;
+    margin-top: 20px;
+}
+.main-apps{
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+}
+.main-apps h2{
+    font-size: 3.8vh;
+    margin-bottom: 8%;
+    margin-left: 15%;
+}
+.apps{
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    grid-gap: 15px; 
+    margin-top: 10px;
+    justify-content: start;
+}
+.apps img{
+    width: 60px;  
+    height: 60px;
+    border-radius: 10px;
+    padding: 10px;
+    box-sizing: border-box;
+    cursor: pointer;
+    transition: transform 0.2s;
+}
+.apps img:hover{
+    transform: scale(1.1);
+}
+footer h3{
+    font-size: 2.2vh;
+    margin-bottom: 8%;
+    font-weight: normal;
+}
+footer p{
+    font-size: 2vh;
+    margin-bottom: 0%;
+    line-height: 1.4;
+}
+footer a{
+    text-decoration: none;
+    color: white;
+}
+.contacts div{
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    margin-bottom: 10px;
+    white-space: nowrap;
+}
+.contacts img{
+    width: 15%;
+    height: 15%;
+    flex-shrink: 0;
+}
+.time{
+    margin-top: 20px;
+    font-size: 18px;
+    font-family: 'Courier New', Courier, monospace;
+    color: #ffffff;
+    border-top: 1px solid rgba(255, 255, 255, 0.1);
+    padding-top: 10px;
+    justify-content: row;
+}
+.parent footer{
+    grid-column: 1 / -1;
 }

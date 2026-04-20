@@ -1,0 +1,84 @@
+<!DOCTYPE html>
+<html lang="uk">
+<head>
+    <meta charset="UTF-8">
+    <title>Voltify - Звітність</title>
+    <link rel="stylesheet" href="report.css">
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+</head>
+<body>
+    <div class="parent">
+        <div class="div1"></div>
+        <div class="div2"></div>
+        <div class="div3">
+            <a href="index.html"><h1>Voltify</h1></a>
+        </div> 
+        <div class="div4">
+            <img src="images/data-management.png" alt="Settings">
+        </div>
+        <div class="div5">
+            <div class="report-container">
+                <h1>Статистика каталогу</h1>
+                <div class="stats-cards">
+                    <div class="card">
+                        <h3>Всього одиниць</h3> <p id="totalProducts">0</p>
+                    </div>
+                    <div class="card">
+                        <h3>Вартість складу</h3> <p id="totalValue">0 грн</p>
+                    </div>
+                    <div class="card">
+                        <h3>Категорій</h3>
+                        <p id="totalCategories">0</p>
+                    </div>
+                </div>
+                <div class="chart-section">
+                    <canvas id="categoryChart"></canvas>
+                </div>
+                <button onclick="window.location.href='/catalog-page'">Назад до каталогу</button>
+            </div>
+        </div>
+    </div>
+    <footer>
+        <div class="main-apps">
+            <h2>Voltify</h2>
+            <div class="apps">
+                <img src="images/instagram.png" alt="">
+                <img src="images/facebook.png" alt="">
+                <img src="images/telegram.png" alt="">
+                <img src="images/tiktok.png" alt="">
+            </div>
+        </div>
+        <div class="addresses">
+            <h3>Адреси:</h3>
+            <p>місто Івано-Франківськ,</p>
+            <p>м.Південний Бульвар...</p>
+        </div>
+        <div class="contacts">
+            <h3>Телефонуйте:</h3>
+            <div>
+                <img src="images/telephone.png" alt="">
+                <p>(068) 053 73 47</p>
+            </div>
+            <div>
+                <img src="images/telephone.png" alt="">
+                <p>(044) 345 23 54</p>
+            </div>
+            <div>
+                <img src="images/telephone.png" alt="">
+                <p>(095) 542 42 43</p>
+            </div>
+        </div>
+        <div class="email">
+            <h3>Напишіть нам:</h3>
+            <a href="contacts.html"><p>Email: rimaroleg44@gmail.com</p></a>
+            <p>Режим роботи:</p>
+            <p>пн-пт: 10:00-21:00</p>
+            <p>сб: 10:00-18:00</p>
+        </div>
+        <div class="time">
+            <p id="real-time-clock">Завантаження...</p>
+        </div>
+    </footer>
+    <script src="report.js"></script>
+</body>
+</html>
