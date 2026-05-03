@@ -4,7 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Voltify</title>
-    <link rel="stylesheet" href="style.css">
+    <link rel="stylesheet" href="style/style.css">
 </head>
 <body>
     <div class="parent">
@@ -38,13 +38,16 @@
                 <h2>Звіт</h2><img src="images/bar-chart.png">
             </a>
         </div>
-
-        <div class="div11">
-            <h2>Останні дії</h2>
-            <p>Видано ноутбук</p>
-            <p>Повернуто монітор</p>
-            <p>Списано прінтер</p>
+        <div id="admin-panel-link" style="display: none; margin-top: 20px; text-align: center;">
+            <button onclick="window.location.href='admin-contacts.html'" class="admin-btn">Переглянути повідомлення клієнтів</button>
         </div>
+        <div class="div11">
+    <h2>Останні дії</h2>
+    <div class="recent-actions-list" id="recent-actions">
+        <!-- Сюди JS автоматично вставить реальні дії з бази -->
+        <p>Завантаження останніх подій...</p>
+    </div>
+</div>
     </div>
     <footer>
         <div class="main-apps">
@@ -87,6 +90,6 @@
             <p id="real-time-clock">Завантаження...</p>
         </div>
     </footer>
-    <script src="JavaScript.js"></script>
+    <script src="js/JavaScript.js"></script>
 </body>
 </html>

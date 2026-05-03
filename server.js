@@ -1,117 +1,180 @@
+require('dotenv').config();
 const express=require('express');
-const fs=require('fs');
+const cors=require('cors');
+const bodyParser=require('body-parser');
+const session=require('express-session');
 const path=require('path');
+const bcrypt=require('bcrypt');
+const {createClient}=require('@supabase/supabase-js');
 const app=express();
-app.use(express.json({limit: '50mb'}));
-app.use(express.urlencoded({extended: true, limit: '50mb'}));
-app.use(express.static(__dirname)); 
-const externalGoodsPath='C:/Users/User/OneDrive/Desktop/Voltify/Goods';
-if(!fs.existsSync(externalGoodsPath)){
-    console.log("!] Папка 'Goods' не знайдена. Перевір шлях у server.js");
+const PORT=process.env.PORT || 3000;
+const supabase = createClient(
+    process.env.SUPABASE_URL, 
+    process.env.SUPABASE_SERVICE_ROLE_KEY
+);
+app.use(cors({ 
+    origin: ['http://localhost:3000', 'http://127.0.0.1:3000'], // Додай сюди свою адресу, якщо вона інша
+    credentials: true 
+}));
+app.use(bodyParser.json({ limit: '50mb' }));
+app.use(express.json());
+app.use(session({
+    secret: 'voltify-fixed-2026',
+    resave: false,
+    saveUninitialized: false,
+    cookie: {secure: false, maxAge: 24 * 60 * 60 * 1000}
+}));
+app.use(express.static(__dirname));
+app.use('/goods-images', express.static(path.join(__dirname, 'Goods')));
+function requireAdmin(req, res, next){
+    if(req.session.user && req.session.user.isAdmin) return next();
+    res.status(403).json({success: false, message: 'Потрібні права адміністратора'});
 }
-app.use('/goods-images', express.static(externalGoodsPath));
-const dataDir=path.join(__dirname, 'data');
-const productsFile=path.join(dataDir, 'products.json');
-const usersFile=path.join(dataDir, 'users.json');
-const categoriesFile=path.join(dataDir, 'categories.json');
-if(!fs.existsSync(dataDir)) fs.mkdirSync(dataDir);
-if(!fs.existsSync(productsFile)) fs.writeFileSync(productsFile, '[]');
-if(!fs.existsSync(usersFile)) fs.writeFileSync(usersFile, '[]');
-if(!fs.existsSync(categoriesFile)){
-    const defaultCats=[
-        {id: 1, name: "Всі товари"}, {id: 2, name: "Ноутбуки"}, 
-        {id: 3, name: "ПК"}, {id: 4, name: "Мишки"}, 
-        {id: 5, name: "Навушники"}, {id: 6, name: "Монітори"}, {id: 7, name: "Підставки"}
-    ];
-    fs.writeFileSync(categoriesFile, JSON.stringify(defaultCats, null, 2));
-}
-const readJSON=(file)=>{
-    try{
-        if(!fs.existsSync(file))return[];
-        const data=fs.readFileSync(file, 'utf8');
-        return JSON.parse(data || "[]");
-    } 
-    catch(e){return [];}
-};
-const writeJSON=(file, data)=>{
-    fs.writeFileSync(file, JSON.stringify(data, null, 2), 'utf8');
-};
-app.get('/', (req, res)=>res.sendFile(path.join(__dirname, 'sign in.html')));
-app.get('/login-page', (req, res)=>res.sendFile(path.join(__dirname, 'login.html')));
-app.get('/dashboard', (req, res)=>res.sendFile(path.join(__dirname, 'index.html')));
-app.get('/catalog-page', (req, res)=>res.sendFile(path.join(__dirname, 'catalog.html')));
-app.get('/editing', (req, res)=>res.sendFile(path.join(__dirname, 'editing.html')));
-app.get('/goods', (req, res)=>res.sendFile(path.join(__dirname, 'goods.html')));
-app.get('/report', (req, res)=>res.sendFile(path.join(__dirname, 'report.html')));
-app.post('/register', (req, res)=>{
-    const{login, password}=req.body;
-    let users=readJSON(usersFile);
-    if(users.find(u=>u.login===login)){
-        return res.status(400).json({success: false, message: "Цей користувач уже існує"});
-    }
-    users.push({login, password});
-    writeJSON(usersFile, users);
-    const role=(login==='admin')?'admin':'user';
-    res.json({ success: true, role: role });
-});
-app.post('/login', (req, res)=>{
+app.post('/register', async (req, res)=>{
     const {login, password}=req.body;
-    const users=readJSON(usersFile);
-    const user=users.find(u=>u.login===login && u.password===password);
-    if(user){
-        const role=(login==='admin')?'admin':'user';
-        res.json({ success: true, role: role });
-    } else {
-        res.status(401).json({ success: false, message: "Невірний логін або пароль" });
-    }
-});
-app.get('/get-products', (req, res)=>res.json(readJSON(productsFile)));
-app.post('/add-product', (req, res)=>{
     try{
-        let products=readJSON(productsFile);
-        const newProd=req.body;
-        newProd.id=newProd.id ? Number(newProd.id):Date.now();
-        products.push(newProd);
-        writeJSON(productsFile, products);
+        const hashedPassword=await bcrypt.hash(password, 10);
+        const {error}=await supabase.from('users').insert([{
+            login: login,
+            password_hash: hashedPassword
+        }]);
+        if(error) throw error;
         res.json({success: true});
     } 
-    catch(e){ res.status(500).json({success: false});}
+    catch(err){
+        res.status(400).json({success: false, message: err.message});
+    }
 });
-app.put('/api/update-product/:id', (req, res)=>{
+app.post('/login', async (req, res)=>{
+    const {login, password}=req.body;
     try{
-        const id=Number(req.params.id);
-        const updatedData=req.body;
-        let products=readJSON(productsFile);
-        const index=products.findIndex(p => Number(p.id) === id);
-        if (index!==-1){
-            products[index]={ ...updatedData, id: id };
-            writeJSON(productsFile, products);
-            res.json({success: true}); 
-        } 
-        else{
-            res.status(404).json({ success: false, message: "Товар не знайдено" });
-        }
+        const {data: user, error}=await supabase.from('users').select('*').eq('login', login).maybeSingle();
+        if(error || !user) return res.status(401).json({success: false, message: "Користувача не знайдено"});
+        const isMatch=await bcrypt.compare(password, user.password_hash);
+        if(!isMatch) return res.status(401).json({success: false, message: "Невірний пароль"});
+        const isAdmin=login.toLowerCase()==='admin';
+        req.session.user={id: user.id, login: user.login, isAdmin: isAdmin};
+        res.json({success: true, isAdmin: isAdmin});
     } 
-    catch(e){res.status(500).json({ success: false});}
+    catch(err){
+        res.status(500).json({success: false, message: "Помилка сервера"});
+    }
 });
-app.delete('/api/delete-product/:id', (req, res)=>{
+app.get('/get-products', async (req, res)=>{
+    const {data}=await supabase.from('products').select('*');
+    res.json(data || []);
+});
+app.post('/add-product', requireAdmin, async(req, res)=>{
+    const product=req.body;
+    if(!product.id){
+        product.id=Math.floor(Math.random()*1000000000); 
+    }
+    const {error}=await supabase.from('products').insert([product]);
+    if(error){
+        console.error("Помилка Supabase:", error.message);
+        return res.status(400).json({ success: false, message: error.message });
+    }
+    res.json({success: true});
+});
+app.put('/api/update-product/:id', requireAdmin, async(req, res)=>{
+    const {id}=req.params;
+    const {error}=await supabase.from('products').update(req.body).eq('id', id);
+    if(error) return res.status(400).json({success: false, message: error.message});
+    res.json({success: true});
+});
+app.delete('/api/delete-product/:id', requireAdmin, async(req, res)=>{
+    const productId=req.params.id;
+    console.log(`Спроба видалення товару з ID: ${productId}`);
     try{
-        const id=Number(req.params.id);
-        let products=readJSON(productsFile);
-        const filtered=products.filter(p=>Number(p.id)!==id);
-        if(products.length!==filtered.length){
-            writeJSON(productsFile, filtered);
-            res.json({success: true});
-        } 
-        else{
-            res.status(404).json({success: false});
+        const {error}=await supabase
+            .from('products')
+            .delete()
+            .eq('id', productId);
+        if(error){
+            console.error("Помилка Supabase при видаленні:", error.message);
+            return res.status(400).json({ success: false, message: error.message });
         }
+        console.log("Товар успішно видалено з бази");
+        res.json({success: true});
     } 
-    catch(e){res.status(500).json({success: false});}
+    catch(err){
+        console.error("Критична помилка сервера при видаленні:", err.message);
+        res.status(500).json({ success: false, message: "Помилка сервера" });
+    }
 });
-app.get('/get-categories', (req, res)=>res.json(readJSON(categoriesFile)));
-const PORT=3000;
+app.get('/get-categories', async (req, res)=>{
+    const {data}=await supabase.from('categories').select('*').order('id', {ascending: true});
+    res.json(data || []);
+});
 app.listen(PORT, ()=>{
-    console.log(`\n--- СЕРВЕР ПРАЦЮЄ ---`);
-    console.log(`Адреса: http://localhost:${PORT}`);
+    console.log(`Сервер працює: http://localhost:${PORT}`);
+});
+app.post('/api/save-contact', async (req, res)=>{
+    const { name, email, message }= req.body;
+    if(!name || !email || !message){
+        return res.status(400).json({success: false, message: "Заповніть всі поля!"});
+    }
+    try{
+        const{error}=await supabase
+            .from('contacts')
+            .insert([{ name, email, message }]);
+        if(error){
+            console.error("Деталі помилки Supabase:", error); 
+            return res.status(500).json({ success: false, message: error.message });
+        }
+        res.json({ success: true, message: "Повідомлення збережено!" });
+    } 
+    catch(err){
+        console.error("Критична помилка сервера:", err);
+        res.status(500).json({ success: false, message: "Внутрішня помилка сервера" });
+    }
+});
+app.get('/api/get-contacts', requireAdmin, async (req, res)=>{
+    try{
+        console.log("Запит на отримання контактів від адміна...");
+        const { data, error }= await supabase
+            .from('contacts')
+            .select('*')
+            .order('created_at', { ascending: false });
+        if(error){
+            console.error("Помилка Supabase:", error.message);
+            return res.status(500).json({ success: false, message: error.message });
+        }
+        console.log(`Знайдено повідомлень: ${data.length}`);
+        res.json(data); 
+    } 
+    catch (err){
+        console.error("Критична помилка сервера:", err);
+        res.status(500).json({ success: false, message: "Помилка сервера" });
+    }
+});
+app.delete('/api/delete-contact/:id', requireAdmin, async (req, res)=>{
+    const {id}=req.params;
+    try{
+        const {error}= await supabase
+            .from('contacts')
+            .delete()
+            .eq('id', id);
+        if(error) throw error;
+        res.json({ success: true, message: "Повідомлення видалено" });
+    } 
+    catch(err){
+        console.error("Помилка видалення:", err.message);
+        res.status(500).json({ success: false, message: "Не вдалося видалити" });
+    }
+});
+app.get('/api/recent-actions', async (req, res)=>{
+    try{
+        const {data, error}= await supabase
+            .from('products')
+            .select('name, created_at')
+            .order('created_at', { ascending: false })
+            .limit(3); 
+        if(error) throw error;
+        const actions= data.map(item=>`Додано товар: ${item.name}`);
+        res.json(actions);
+    } 
+    catch(err){
+        res.status(500).json([]);
+    }
 });

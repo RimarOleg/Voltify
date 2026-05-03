@@ -1,0 +1,34 @@
+# Залежності
+node_modules/
+
+# Логи
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+pnpm-debug.log*
+*.log
+
+# Змінні середовища (секрети)
+.env
+.env.*
+
+# Білд / збірка
+dist/
+build/
+
+# Кеш
+.cache/
+.next/
+.nuxt/
+
+# Системні файли
+.DS_Store
+Thumbs.db
+
+# IDE / редактори
+.vscode/
+.idea/
+
+# Тимчасові файли
+*.tmp
+*.swp
