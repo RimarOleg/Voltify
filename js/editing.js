@@ -1,132 +1,118 @@
-document.addEventListener('DOMContentLoaded', async()=>{
-    const role=localStorage.getItem('userRole');
-    if(role!=='admin'){
+import {getCategories, addProduct, updateProduct} from './api.js';
+import {initClock} from './utils.js';
+import * as ui from './ui.js';
+initClock();
+
+async function initEditingPage(){
+    const role= localStorage.getItem('userRole');
+    if (role!=='admin'){
         alert("У вас немає прав доступу!");
-        window.location.href="catalog.html";
+        window.location.href= "catalog.html";
         return;
     }
-    const inputName=document.querySelector('.div7 input[placeholder="Назва пристрою"]');
-    const inputWarranty=document.querySelector('.div7 input[placeholder="Гарантія"]');
-    const inputYear=document.querySelector('.div7 input[placeholder="Рік випуску"]');
-    const inputPrice=document.getElementById('edit-price');
-    const inputQuantity=document.querySelector('.div7 input[type="number"]:last-of-type');
-    const selectBrand=document.getElementById('edit-category');
-    const inputFile=document.getElementById('edit-image-file');
-    const previewSmall=document.getElementById('preview-small');
-    const previewName=document.getElementById('preview-name');
-    const previewPrice=document.getElementById('preview-price');
-    const previewImg=document.getElementById('preview-img');
-    const div8Paragraphs=document.querySelectorAll('.div8 p');
-    const updateLivePreview=()=>{
-        if(previewName){
-            previewName.textContent=inputName.value || "Назва пристрою";
-        }
-        if(previewPrice){
-            previewPrice.textContent=`$${inputPrice.value || 0}`;
-        }
-        div8Paragraphs.forEach(p=>{
-            if(p.textContent.includes('Гарантія:')){
-                p.textContent=`Гарантія: ${inputWarranty.value || 0} рік`;
-            }
-            if(p.textContent.includes('Рік:')){
-                p.textContent=`Рік: ${inputYear.value || 2025}`;
-            }
-        });
+    const fields={
+        name: document.querySelector('.div7 input[placeholder="Назва пристрою"]'),
+        warranty: document.querySelector('.div7 input[placeholder="Гарантія"]'),
+        year: document.querySelector('.div7 input[placeholder="Рік випуску"]'),
+        price: document.querySelector('.div7 input[placeholder="Ціна"]') || document.getElementById('edit-price'),
+        quantity: document.querySelector('.div7 input[type="number"]'),
+        select: document.getElementById('edit-category') || document.querySelector('.div7 select'),
+        file: document.getElementById('edit-image-file') || document.querySelector('.div7 input[type="file"]')
     };
-    [inputName, inputWarranty, inputYear, inputPrice].forEach(el=>{
-        if(el) el.addEventListener('input', updateLivePreview);
+    const previewEls={
+        small: document.getElementById('preview-small'),
+        name: document.getElementById('preview-name') || document.querySelector('.div8 h3'),price: document.getElementById('preview-price') || document.querySelector('.div8 .price-tag'),
+        main: document.getElementById('preview-img') || document.querySelector('.div8 img'),
+        paragraphs: document.querySelectorAll('.div8 p')
+    };
+    const runPreview= ()=>{
+        ui.updateProductPreview({
+            name: fields.name?.value,
+            price: fields.price?.value,
+            warranty: fields.warranty?.value,
+            year: fields.year?.value
+        }, previewEls);
+    };
+    [fields.name, fields.warranty, fields.year, fields.price].forEach(el=>{
+        el?.addEventListener('input', runPreview);
     });
-    if(inputFile){
-        inputFile.addEventListener('change', function(){
-            if(this.files && this.files[0]){
-                const file=this.files[0];
-                const reader=new FileReader();
-                reader.onload=(e)=>{
-                    if(previewSmall) previewSmall.src=e.target.result;
-                    if(previewImg) previewImg.src=e.target.result;
-                    if(previewImg) previewImg.dataset.filename=file.name;
+    if(fields.file){
+        fields.file.onchange= function(){
+            if(this.files?.[0]){
+                const reader= new FileReader();
+                reader.onload= (e)=>{
+                    const result= e.target.result;
+                    if(previewEls.main){
+                        previewEls.main.src= result;
+                        previewEls.main.dataset.base64= result; 
+                    }
+                    ui.updateImagePreview(result, this.files[0].name, previewEls);
                 };
-                reader.readAsDataURL(file);
+                reader.readAsDataURL(this.files[0]);
             }
-        });
-    }
-    let categoryMap={};
-    const urlParams=new URLSearchParams(window.location.search);
-    const isEditMode=urlParams.get('edit')==='true';
-    let productId=null;
-    try{
-        const resp=await fetch('/get-categories');
-        const categories=await resp.json();
-        if(selectBrand){
-            selectBrand.innerHTML='';
-            categories.forEach(cat=>{
-                categoryMap[cat.name]=cat.id;
-                const opt=new Option(cat.name, cat.name);
-                selectBrand.add(opt);
-            });
-        }
-    } 
-    catch(e){
-        console.error("Не вдалося завантажити категорії через API");
-    }
-    if(isEditMode){
-        const storedData=localStorage.getItem('selectedProduct');
-        if(storedData){
-            const p=JSON.parse(storedData);
-            productId=p.id;
-            inputName.value=p.name || '';
-            inputWarranty.value=p.warranty || '';
-            inputYear.value=p.year || '';
-            inputPrice.value=p.price || '';
-            if(inputQuantity) inputQuantity.value=p.quantity || 0;
-            if(p.image){
-                const fullPath=`/goods-images/${p.image}`;
-                if(previewSmall) previewSmall.src=fullPath;
-                if(previewImg){
-                    previewImg.src=fullPath;
-                    previewImg.dataset.filename=p.image;
-                }
-            }
-            const brandName=Object.keys(categoryMap).find(key=>categoryMap[key]===p.categoryID);
-            if(brandName) selectBrand.value=brandName;
-            document.querySelector('.div7 h2').textContent="Редагування товару";
-            document.querySelector('.save').textContent="Оновити товар";
-            updateLivePreview();
-        }
-    }
-    document.querySelector('.save').addEventListener('click', async()=>{
-        const productData={
-            name: inputName.value,
-            price: parseFloat(inputPrice.value) || 0,
-            warranty: parseInt(inputWarranty.value) || 0,
-            year: parseInt(inputYear.value) || 2024,
-            quantity: parseInt(inputQuantity.value) || 0,
-            categoryID: categoryMap[selectBrand.value] || null,
-            image: (previewImg && previewImg.dataset.filename) ? previewImg.dataset.filename : "placeholder.png"
         };
-        const url=isEditMode ? `/api/update-product/${productId}`: '/add-product';
-        const method=isEditMode ? 'PUT': 'POST';
-        try{
-            const response=await fetch(url,{
-                method: method,
-                headers: {'Content-Type': 'application/json'},
-                body: JSON.stringify(productData)
+    }
+    let categoryMap= {};
+    const isEditMode= new URLSearchParams(window.location.search).get('edit') === 'true';
+    let productId= null;
+    try{
+        const categories= await getCategories();
+        if(fields.select){
+            fields.select.innerHTML= '<option value="">Оберіть бренд</option>';
+            categories.forEach(cat=>{
+                categoryMap[cat.name]= cat.id;
+                fields.select.add(new Option(cat.name, cat.name));
             });
-            const result=await response.json();
-            if(result.success){
-                alert(isEditMode ? "Оновлено!" : "Додано!");
-                localStorage.removeItem('selectedProduct');
-                window.location.href="catalog.html";
-            } 
-            else{
-                alert("Помилка: "+result.message);
-            }
-        } 
-        catch(error){
-            alert("Помилка з'єднання з сервером");
         }
-    });
-    document.querySelector('.delete').addEventListener('click',()=>{
-        window.location.href="catalog.html";
-    });
-});
+        if(isEditMode){
+            const p= JSON.parse(localStorage.getItem('selectedProduct'));
+            if(p){
+                productId= p.id;
+                ui.fillProductForm(p, fields, categoryMap);
+                if(p.image && previewEls.main){
+                    const src= p.image.startsWith('data:')? p.image: `/goods-images/${p.image}`;
+                    previewEls.main.src= src;
+                }
+                const title= document.querySelector('.div7 h2');
+                if(title) title.textContent= "Редагування товару";
+                const saveBtn= document.querySelector('.save');
+                if(saveBtn) saveBtn.textContent= "Оновити товар";
+                runPreview();
+            }
+        }
+    } catch(e){console.error("Помилка ініціалізації:", e);}const saveBtn = document.querySelector('.save');
+    if(saveBtn){
+        saveBtn.onclick= async ()=>{
+            if(!fields.name || !fields.price){
+                console.error("Не знайдено поля форми!");
+                return;
+            }
+            const productData={
+                name: fields.name.value,
+                price: parseFloat(fields.price.value) || 0,
+                warranty: parseInt(fields.warranty.value) || 0,
+                year: parseInt(fields.year.value) || 2024,
+                quantity: parseInt(fields.quantity.value) || 0,
+                categoryID: categoryMap[fields.select.value] || null,
+                image: previewEls.main?.dataset.base64 || previewEls.main?.src || "placeholder.png"
+            };
+            console.log("Відправка даних:", productData);
+            const result= isEditMode? await updateProduct(productId, productData): await addProduct(productData);
+            if(result){
+                alert("Успішно збережено!");
+                localStorage.removeItem('selectedProduct');
+                window.location.href= "catalog.html";
+            }
+        };
+    }
+    const deleteBtn= document.querySelector('.delete');
+    if(deleteBtn){
+        deleteBtn.onclick= ()=>{
+            if(confirm("Скасувати?")){
+                localStorage.removeItem('selectedProduct');
+                window.location.href= "catalog.html";
+            }
+        };
+    }
+}
+initEditingPage();

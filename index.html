@@ -3,52 +3,71 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate">
+    <meta http-equiv="Pragma" content="no-cache">
+    <meta http-equiv="Expires" content="0">
+
+    <meta name="description" content="Voltify — сучасний інтернет-магазин та система обліку техніки й електроніки.">
+    <meta name="keywords" content="електроніка, Voltify, купити техніку, ноутбуки, пк">
+    <meta property="og:title" content="Voltify — Магазин електроніки">
+    <meta property="og:description" content="Якісна техніка з надійним керуванням каталогом.">
+    <meta property="og:image" content="images/data-management.png">
     <title>Voltify</title>
     <link rel="stylesheet" href="style/style.css">
 </head>
 <body>
     <div class="parent">
-        <div class="div1"></div>
-        <div class="div2"></div>
-        <div class="div3">
+    <div class="div1"></div>
+    <div class="div2-background"> <div class="div3">
             <h1>Voltify</h1>
         </div>
         <div class="div4">
             <img src="images/data-management.png" alt="">
         </div>
         <div class="div6">
-            <a href="sign in.html"><img src="images/user.png" id="profileIcon" alt="Профіль" onclick="handleAuthAction()"></a> 
+            <a href="signin.html"><img src="images/user.png" id="profileIcon" alt="Профіль"></a> 
         </div>
         <div class="div7">
             <h2>Облік техніки</h2>
         </div>
-        
-        <div class="div8">
-            <a class="catalog" href="catalog.html">
-                <h2>Каталог</h2><img src="images/category.png">
-            </a>
+
+        <div class="main-cards-container">
+            <div class="card-item div8">
+                <a href="catalog.html">
+                    <h2>Каталог</h2>
+                    <img src="images/category.png">
+                </a>
+            </div>
+            <div class="card-item div9 admin-feature">
+                <a href="editing.html">
+                    <h2>Редагування</h2>
+                    <img src="images/video-editing.png">
+                </a>
+            </div>
+            <div class="card-item div10 admin-feature">
+                <a href="report.html">
+                    <h2>Звіт</h2>
+                    <img src="images/bar-chart.png">
+                </a>
+            </div>
+            <div class="card-item div12" onclick="window.location.href='cart.html'">
+                <h2>Кошик</h2>
+                <img src="images/cart.png" alt="Кошик">
+                <p>Товарів: <span id="cart-count">0</span></p>
+            </div>
         </div>
-        <div class="div9">
-            <a class="editing" href="editing.html">
-                <h2>Редагування</h2><img src="images/video-editing.png">
-            </a>
-        </div>
-        <div class="div10">
-            <a class="report" href="report.html">
-                <h2>Звіт</h2><img src="images/bar-chart.png">
-            </a>
-        </div>
-        <div id="admin-panel-link" style="display: none; margin-top: 20px; text-align: center;">
+
+        <div id="admin-panel-link" style="display: none; width: 100%; text-align: center; margin: 20px 0;">
             <button onclick="window.location.href='admin-contacts.html'" class="admin-btn">Переглянути повідомлення клієнтів</button>
         </div>
-        <div class="div11">
-    <h2>Останні дії</h2>
-    <div class="recent-actions-list" id="recent-actions">
-        <!-- Сюди JS автоматично вставить реальні дії з бази -->
-        <p>Завантаження останніх подій...</p>
+        <div id="recent-actions-section" class="recent-container">
+            <h2 class="recent-main-title">Останні новинки каталогу</h2>
+            <div class="recent-grid-wrapper" id="recent-actions">
+                <p class="loading-text">Завантаження новинок...</p>
+            </div>
+        </div>
     </div>
 </div>
-    </div>
     <footer>
         <div class="main-apps">
             <h2>Voltify</h2>
@@ -90,6 +109,6 @@
             <p id="real-time-clock">Завантаження...</p>
         </div>
     </footer>
-    <script src="js/JavaScript.js"></script>
+    <script type="module" src="js/main.js"></script>
 </body>
 </html>

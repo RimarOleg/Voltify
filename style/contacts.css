@@ -179,5 +179,97 @@ footer a{
     justify-content: row;
 }
 .parent footer{
-    grid-column: 1 / -1;
+    grid-column: 1/-1;
+}
+
+@media(max-width: 768px){
+    .parent{
+        grid-template-columns: 1fr;
+        grid-template-rows: auto;
+    }
+    header{
+        padding: 15px 5%;
+    }
+    .div3{
+        font-size: 18px; 
+        margin-left: 0;
+        margin-right: 15px;
+    }
+    .div4{
+        margin-right: 0;
+    }
+    .div4 img{
+        width: 55px; 
+        height: auto;
+    }
+    .card{
+        border-top-left-radius: 30px;
+        border-top-right-radius: 30px;
+        padding: 30px 15px;
+        font-size: 16px;
+    }
+    form{
+        font-size: 20px;
+        padding: 20px;
+        width: 90%;
+        margin: 0 auto;
+        box-sizing: border-box;
+    }
+    input, textarea{
+        font-size: 16px; 
+        padding: 12px;
+    }
+    label{
+        font-size: 16px;
+        margin-bottom: 5px;
+    }
+    button{
+        font-size: 18px;
+        padding: 12px;
+        margin-top: 20px;
+        width: 100%; 
+    }
+    footer{
+        flex-direction: column;
+        align-items: center;
+        text-align: center;
+        gap: 35px;
+        padding: 40px 20px;
+    }
+    .main-apps{
+        align-items: center;
+    }
+    .main-apps h2{
+        font-size: 28px;
+        margin-left: 0;
+        margin-bottom: 15px;
+    }
+    .apps{
+        justify-content: center;
+    }
+    .apps img{
+        width: 50px;
+        height: 50px;
+    }
+    footer h3{
+        font-size: 20px;
+        margin-bottom: 10px;
+    }
+    footer p{
+        font-size: 16px;
+    }
+    .contacts div{
+        justify-content: center;
+        white-space: normal; 
+    }
+    .contacts img{
+        width: 20px;
+        height: 20px;
+    }
+    .time{
+        width: 100%;
+        text-align: center;
+        font-size: 14px;
+        margin-top: 15px;
+    }
 }

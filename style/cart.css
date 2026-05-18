@@ -1,0 +1,247 @@
+body{
+    background-color: #3C3C4F;
+    color: #fff;
+    font-family: 'Times New Roman', Times, serif;
+    margin: 0;
+    display: flex;
+    flex-direction: column;
+    min-height: 100vh;
+}
+.parent{
+    flex: 1; 
+}
+a{
+    text-decoration: none;
+}
+.header-main{
+    background-color: #313142; 
+    padding: 20px 8%;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    border-bottom: 1px solid rgba(255,255,255,0.1);
+}
+.header-main h1{
+    margin: 0;
+    color: #fff;
+    font-size: 2.5rem;
+    text-transform: uppercase;
+    letter-spacing: 2px;
+}
+.header-icons img{
+    height: 60px;
+    margin-left: 20px;
+    filter: brightness(0) invert(1); 
+    opacity: 0.8;
+}
+.page-title{
+    text-align: center;
+    margin-top: 40px;
+    font-size: 2rem;
+}
+.cart-container{
+    display: flex;
+    flex-wrap: wrap;
+    gap: 30px;
+    padding: 20px;
+    max-width: 1200px;
+    margin: 20px auto;
+    justify-content: center;
+}
+#cart-items{
+    flex: 1;
+    min-width: 350px;
+}
+.cart-card{
+    display: flex;
+    align-items: center;
+    background: #ffffff;
+    color: #333;
+    padding: 20px;
+    margin-bottom: 15px;
+    border-radius: 15px;
+    box-shadow: 0 8px 20px rgba(0,0,0,0.3);
+}
+.cart-img{
+    width: 100px;
+    height: 100px;
+    object-fit: contain;
+    margin-right: 20px;
+}
+.cart-details{
+    flex-grow: 1;
+}
+.cart-details h3{
+    margin: 0 0 5px 0;
+    color: #3C3C4F;
+}
+.cart-summary{
+    width: 350px;
+    background: #ffffff;
+    color: #333;
+    padding: 30px;
+    border-radius: 20px;
+    height: fit-content;
+    box-shadow: 0 10px 30px rgba(0,0,0,0.4);
+    position: sticky;
+    top: 20px;
+}
+.cart-summary h2{
+    margin-top: 0;
+    border-bottom: 2px solid #eee;
+    padding-bottom: 10px;
+}
+.summary-line{
+    display: flex;
+    justify-content: space-between;
+    font-size: 1.2rem;
+    margin: 20px 0;
+}
+.checkout-btn{
+    width: 100%;
+    padding: 18px;
+    background: #28a745;
+    color: white;
+    border: none;
+    border-radius: 12px;
+    font-size: 1.1rem;
+    font-weight: bold;
+    cursor: pointer;
+    transition: 0.3s;
+}
+.checkout-btn:hover{
+    background: #218838;
+    transform: scale(1.02);
+}
+.back-link{
+    display: block;
+    text-align: center;
+    margin-top: 20px;
+    color: #6A6A89;
+    text-decoration: none;
+}
+footer{
+    background-color: #3C3C4F;
+    color: white;
+    padding: 4% 8%;
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-start;
+    gap: 5%;
+    margin-top: auto; 
+}
+.email a{
+    color: white;
+    text-decoration: none;
+    transition: transform 0.3s ease;
+    display: inline-block;
+}
+.email a:hover{
+    transform: scale(1.1);
+}
+.main-apps{ 
+    display: flex; 
+    flex-direction: column; 
+    align-items: flex-start; 
+}
+.apps{ 
+    display: grid; 
+    grid-template-columns: repeat(2, 1fr); 
+    grid-gap: 15px; 
+}
+.apps img{ 
+    width: 50px; 
+    cursor: pointer; 
+    transition: 0.2s; 
+}
+.apps img:hover{ 
+    transform: scale(1.1); 
+}
+.contacts div{ 
+    display: flex; 
+    align-items: center; 
+    gap: 10px; 
+    margin-bottom: 10px; 
+}
+.contacts img{ 
+    width: 25px; 
+}
+.time{ 
+    font-family: 'Courier New', monospace; 
+    color: white; 
+    padding-top: 10px; 
+}
+
+@media(max-width: 768px){
+    .header-main{
+        padding: 15px 5%;
+    }
+    .header-main h1{
+        font-size: 1.8rem;
+        letter-spacing: 1px;
+    }
+    .header-icons img{
+        height: 40px;
+        margin-left: 12px;
+    }
+    .page-title{
+        font-size: 1.6rem;
+        margin-top: 25px;
+    }
+    .cart-container{
+        padding: 10px;
+        gap: 20px;
+    }
+    #cart-items{
+        min-width: 100%; 
+    }
+    .cart-card{
+        padding: 15px;
+        border-radius: 12px;
+    }
+    .cart-img{
+        width: 75px;
+        height: 75px;
+        margin-right: 15px;
+    }
+    .cart-details h3{
+        font-size: 1.1rem;
+    }
+    .cart-summary{
+        width: 100%;
+        box-sizing: border-box;
+        position: static; 
+        padding: 20px;
+        border-radius: 15px;
+    }
+    .checkout-btn{
+        padding: 15px;
+        font-size: 1rem;
+    }
+    footer{
+        flex-direction: column; 
+        align-items: center;
+        text-align: center;
+        gap: 30px;
+        padding: 35px 20px;
+    }
+    .main-apps{
+        align-items: center; 
+    }
+    .apps{
+        grid-template-columns: repeat(4, max-content);
+        justify-content: center;
+        grid-gap: 12px;
+    }
+    .apps img{
+        width: 45px;
+    }
+    .contacts{
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+    }
+    .contacts div{
+        justify-content: center;
+    }
+}

@@ -1,6 +1,6 @@
 body{
     background-color: white; /* світлий фон, щоб контент виділявся */
-    font-family: Arial, Helvetica, sans-serif;
+    font-family: 'Times New Roman', Times, serif;
     margin: 0;
 }
 .body{
@@ -22,7 +22,7 @@ header{
     display: flex;
     flex-direction: row; 
     align-items: center;
-    font-size: 1.8vw;
+    font-size: 1.6vw;
     margin-left: 80%;
     justify-content: left;
 }
@@ -198,5 +198,125 @@ footer a{
     justify-content: row;
 }
 .parent footer{
-    grid-column: 1 / -1;
+    grid-column: 1/-1;
+}
+
+@media(max-width: 768px){
+    .body{
+        border-top-left-radius: 40px;
+        border-top-right-radius: 40px;
+        padding: 15px 8px;
+    }
+    header{
+        padding: 12px 15px;
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+    }
+    .div3{
+        margin-left: 0 !important; 
+        font-size: 20px; 
+    }
+    .div4{
+        margin-right: 0 !important;
+        display: flex;
+        justify-content: flex-end;
+    }
+    .div4 img{
+        width: 45px; 
+        height: auto;
+    }
+    .admin-container{
+        padding: 15px;
+        border-radius: 12px;
+        margin: 0 5px;
+    }
+    .admin-header{
+        flex-direction: column;
+        align-items: stretch; 
+        gap: 15px;
+        padding-bottom: 15px;
+    }
+    .admin-header h1{
+        font-size: 22px;
+        text-align: left;
+        line-height: 1.3;
+    }
+    .admin-header div{
+        display: flex;
+        flex-direction: column;
+        gap: 10px;
+        width: 100%;
+    }
+    .btn-primary, .btn-secondary{
+        width: 100%;
+        text-align: center;
+        box-sizing: border-box;
+        padding: 12px;
+        font-size: 15px;
+        margin: 0 !important; 
+    }
+    .table-wrapper{
+        overflow-x: auto; 
+        -webkit-overflow-scrolling: touch;
+        margin-top: 10px;
+        border: 1px solid #eee;
+        border-radius: 6px;
+    }
+    table{
+        min-width: 500px; 
+    }
+    th, td{
+        padding: 10px 8px; 
+        font-size: 13px;
+    }
+    .email-link{
+        word-break: break-all;
+    }
+    footer{
+        flex-direction: column;
+        align-items: center;
+        text-align: center;
+        gap: 30px;
+        padding: 35px 20px;
+    }
+    .main-apps{
+        align-items: center;
+    }
+    .main-apps h2{
+        font-size: 24px;
+        margin-left: 0;
+        margin-bottom: 10px;
+    }
+    .apps{
+        justify-content: center;
+        grid-gap: 12px;
+    }
+    .apps img{
+        width: 45px;
+        height: 45px;
+        padding: 5px;
+    }
+    footer h3{
+        font-size: 18px;
+        margin-bottom: 8px;
+    }
+    footer p{
+        font-size: 15px;
+    }
+    .contacts div{
+        justify-content: center;
+        white-space: normal; 
+        font-size: 15px;
+    }
+    .contacts img{
+        width: 18px;
+        height: 18px;
+    }
+    .time{
+        width: 100%;
+        text-align: center;
+        font-size: 13px;
+        margin-top: 10px;
+    }
 }

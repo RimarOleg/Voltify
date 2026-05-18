@@ -1,120 +1,109 @@
-let allProducts=[];
-let allCategories=[];
-let currentCategoryId=1;
+import {getProducts, getCategories} from './api.js';
+import {initClock} from './utils.js';
+import* as ui from './ui.js';
+initClock();
+
+let allProducts= [];
+let allCategories= [];
+let currentCategoryId= 1;
+const isAdmin= localStorage.getItem('userRole')=== 'admin';
+
 async function init(){
     try{
-        const [prodRes, catRes]=await Promise.all([
-            fetch('/get-products?v='+Date.now()),
-            fetch('/get-categories?v='+Date.now())
+        const [products, categories]= await Promise.all([
+            getProducts(),
+            getCategories()
         ]);
-        allProducts=await prodRes.json();
-        allCategories=await catRes.json();
-        if(!Array.isArray(allProducts)) allProducts=[];
-        if(!Array.isArray(allCategories)) allCategories=[];
-        renderCategories();
-        const urlParams=new URLSearchParams(window.location.search);
-        const searchQuery=urlParams.get('search');
-        if(searchQuery){
-            const inputField=document.getElementById('searchInput');
-            if(inputField) inputField.value=searchQuery;
-            applyFilters();
-        } 
-        else{
-            renderProducts(allProducts);
+        allProducts= Array.isArray(products)? products: [];
+        allCategories= Array.isArray(categories)? categories: [];
+        ui.renderCategoryMenu('catalogMenu', allCategories, 'window.filterByCat');
+        if(isAdmin){
+            const cartBtn= document.querySelector('.cart-btn');
+            if(cartBtn) cartBtn.style.display= 'none';
         }
-        document.getElementById('searchInput')?.addEventListener('input', applyFilters);
-        document.getElementById('minPrice')?.addEventListener('input', applyFilters);
-        document.getElementById('maxPrice')?.addEventListener('input', applyFilters);
-    } 
-    catch(e){
-        console.error("Помилка завантаження:", e);
-        const container=document.getElementById('catalog-container');
-        if(container) container.innerHTML="<h3>Помилка зв'язку з сервером ❌</h3>";
+        const urlParams= new URLSearchParams(window.location.search);
+        const searchQuery= urlParams.get('search');
+        if(searchQuery){
+            const inputField= document.getElementById('searchInput');
+            if(inputField) inputField.value= searchQuery;
+            applyFilters();
+        } else{
+            ui.renderProductList('catalog-container', allProducts, isAdmin);
+        }
+        const catalogBtn= document.getElementById('catalogBtn');
+        const catalogMenu= document.getElementById('catalogMenu');
+        if(catalogBtn){
+            catalogBtn.onclick= (e)=>{
+                e.stopPropagation();
+                if(catalogMenu){
+                    catalogMenu.classList.toggle('show');
+                }
+            };
+        }
+        document.addEventListener('click', (e)=>{
+            if(catalogMenu && !catalogMenu.contains(e.target) && e.target!==catalogBtn){
+                catalogMenu.classList.remove('show');
+            }
+        });
+        ['searchInput', 'minPrice', 'maxPrice'].forEach(id=>{
+            document.getElementById(id)?.addEventListener('input', applyFilters);
+        });
+    } catch(e){
+        console.error("Помилка завантаження каталогу:", e);
+        const container= document.getElementById('catalog-container');
+        if(container) container.innerHTML= "<h3>Помилка зв'язку з сервером ❌</h3>";
     }
 }
+
 function applyFilters(){
-    const searchInput=document.getElementById('searchInput');
-    const searchText=searchInput ? searchInput.value.toLowerCase().trim() : "";
-    const minPrice=parseFloat(document.getElementById('minPrice')?.value) || 0;
-    const maxPrice=parseFloat(document.getElementById('maxPrice')?.value) || Infinity;
-    const filtered=allProducts.filter(p =>{
-        const matchesText=p.name.toLowerCase().includes(searchText);
-        const pCatId=Number(p.categoryID || p.category_id); 
-        const matchesCategory=(Number(currentCategoryId)===1) || (pCatId===Number(currentCategoryId));
-        const productPrice=Number(p.price) || 0;
-        const matchesPrice=productPrice>=minPrice && productPrice<=maxPrice;
-        return matchesText && matchesCategory && matchesPrice;
+    const searchText= document.getElementById('searchInput')?.value.toLowerCase().trim() || "";
+    const minPrice= parseFloat(document.getElementById('minPrice')?.value) || 0;
+    const maxPrice= parseFloat(document.getElementById('maxPrice')?.value) || Infinity;
+    const filtered= allProducts.filter(p=>{
+        const matchesText= p.name.toLowerCase().includes(searchText);
+        const pCatId= Number(p.categoryID || p.category_id); 
+        const matchesCategory= (Number(currentCategoryId)===1) || (pCatId===Number(currentCategoryId));
+        const productPrice= Number(p.price) || 0;
+        return matchesText && matchesCategory && (productPrice>=minPrice && productPrice<=maxPrice);
     });
-    renderProducts(filtered);
+    ui.renderProductList('catalog-container', filtered, isAdmin);
 }
-function renderProducts(list){
-    const container=document.getElementById('catalog-container');
-    if(!container) return;
-    if(list.length===0){
-        container.innerHTML="<h3 style='grid-column: 1/-1; text-align:center; margin-top: 50px; color: #6A6A89;'>Нічого не знайдено 🔍</h3>";
+
+window.filterByCat= function(e, id){
+    if(e) e.preventDefault();
+    currentCategoryId= id;
+    const catalogMenu= document.getElementById('catalogMenu');
+    if(catalogMenu) catalogMenu.classList.remove('show');
+    applyFilters();
+};
+window.openProduct= function(product){
+    localStorage.setItem('selectedProduct', JSON.stringify(product));
+    window.location.href= 'goods.html';
+};
+window.addToCart= (productId)=>{
+    const product= allProducts.find(p=>p.id===productId);
+    if(!product) return;
+    if(Number(product.quantity)<=0){
+        alert("На жаль, цього товару немає в наявності! ❌");
         return;
     }
-    container.innerHTML=list.map((p)=>{
-        const imgPath=p.image || p.image_url; 
-        let imgSrc="";
-        if(imgPath && imgPath.startsWith('data:image')){
-            imgSrc=imgPath;
-        } 
-        else if(imgPath){
-            imgSrc=imgPath.startsWith('http') ? imgPath: `/goods-images/${imgPath}`;
-        } 
-        else{
-            imgSrc='images/placeholder.png';
+    let cart= JSON.parse(localStorage.getItem('cart')) || [];
+    const existing= cart.find(i=>i.id===productId);
+    if(existing){
+        if(existing.quantity>=Number(product.quantity)){
+            alert(`Вибачте, на складі доступно лише ${product.quantity} шт. 📦`);
+            return;
         }
-        return `
-            <div class="product-card" onclick='openProduct(${JSON.stringify(p).replace(/'/g, "&apos;")})'>
-                <img src="${imgSrc}" alt="${p.name}" onerror="this.src='images/placeholder.png'">
-                <p><strong>${p.name}</strong></p>
-                <p>${p.price} грн</p>
-            </div>
-        `;
-    }).join('');
-}
-function openProduct(product){
-    localStorage.setItem('selectedProduct', JSON.stringify(product));
-    window.location.href='goods.html';
-}
-function renderCategories(){
-    const menu=document.getElementById('catalogMenu');
-    if(!menu)return;
-    menu.innerHTML=allCategories.map(cat=> 
-        `<a href="#" onclick="filterByCat(event, ${cat.id})">${cat.name}</a>`
-    ).join('');
-}
-function filterByCat(e, id){
-    if(e) e.preventDefault();
-    currentCategoryId=id;
-    document.getElementById('catalogMenu')?.classList.remove('show');
-    applyFilters();
-}
-document.getElementById('catalogBtn')?.addEventListener('click', (e)=>{
-    e.stopPropagation();
-    document.getElementById('catalogMenu')?.classList.toggle('show');
-});
-document.addEventListener('click', ()=>{
-    document.getElementById('catalogMenu')?.classList.remove('show');
-});
+        existing.quantity+=1;
+    } else{
+        cart.push({ 
+            ...product, 
+            stock: Number(product.quantity), 
+            quantity: 1 
+        });
+    }
+    localStorage.setItem('cart', JSON.stringify(cart));
+    if (window.updateCartCounter) window.updateCartCounter();
+    alert(`${product.name} додано в кошик! ✅`);
+};
 init();
-function logoutAdmin(){
-    if(confirm("Вийти з режиму адміністратора?")){
-        localStorage.setItem("isLoggedIn", "false");
-        localStorage.setItem("userRole", "user");
-        window.location.reload(); 
-    }
-}
-function updateClock(){
-    const now=new Date();
-    const time=now.toLocaleTimeString('uk-UA', { hour: '2-digit', minute: '2-digit', second: '2-digit' });
-    const year=now.getFullYear();
-    const clockElement=document.getElementById('real-time-clock');
-    if(clockElement){
-        clockElement.innerHTML=`${time} &nbsp; ${year}`;
-    }
-}
-setInterval(updateClock, 1000);
-updateClock();

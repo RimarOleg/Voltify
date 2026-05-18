@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="uk">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -7,37 +7,37 @@
     <meta http-equiv="Pragma" content="no-cache">
     <meta http-equiv="Expires" content="0">
 
-    <meta name="description" content="Зв'яжіться з командою Voltify через форму зворотного зв'язку. Ми завжди раді вашим повідомленням.">
-    <meta name="keywords" content="контакти, зворотний зв'язок, написати нам, Voltify">
-    <title>Contacts</title>
-    <link rel="stylesheet" href="style/contacts.css">
+    <meta name="description" content="Твій кошик у Voltify. Перевіряй обрані товари та оформлюй замовлення в один клік.">
+    <meta name="keywords" content="кошик, замовлення, купити техніку, Voltify">
+    <title>Кошик | Voltify</title>
+    <link rel="stylesheet" href="style/cart.css">
 </head>
 <body>
-    <header>
-        <a href="index.html">
-            <div class="div3">
-                <h1>Voltify</h1>
+    <div class="parent">
+        <header class="header-main">
+            <div class="logo">
+                <a href="index.html"><h1>Voltify</h1></a>
             </div>
-        </a>
-        <div class="div4">
-            <img src="images/laptop.png" alt="">
+            <div class="header-icons">
+                <img src="images/data-management.png" alt="Data">
+            </div>
+        </header>
+        <h1 class="page-title">Кошик Voltify</h1>
+        <div class="cart-container">
+            <div id="cart-items">
+                </div>
+            <div class="cart-summary">
+                <h2>Підсумок</h2>
+                <div class="summary-line">
+                    <span>Разом:</span>
+                    <strong id="total-price">0 грн</strong>
+                </div>
+                <button class="checkout-btn" onclick="window.checkout()">Оформити замовлення</button>
+                <a href="catalog.html" class="back-link">← Назад до магазину</a>
+            </div>
         </div>
-    </header>    
-    <div class="header"></div>
-    <div class="card">
-    <h3>Контактна форма</h3>
-    <p class="demo-p">Заповніть форму нижче, щоб залишити повідомлення</p>
-    <div id="error-message" style="color: red; display: none; margin-bottom: 10px;"></div>
-    <form id="contactForm" class="contact-form">
-        <label>Ім'я</label>
-        <input type="text" id="name" name="name" placeholder="Ваше ім'я" required>
-        <label>Email</label>
-        <input type="email" id="email" name="email" placeholder="Email" required>
-        <label>Повідомлення</label>
-        <textarea id="message" name="message" rows="6" placeholder="Ваше повідомлення" required></textarea>
-        <button type="submit">Надіслати</button>
-    </form>
     </div>
+    
     <footer>
         <div class="main-apps">
             <h2>Voltify</h2>
