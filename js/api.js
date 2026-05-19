@@ -115,3 +115,31 @@ export async function updateProductQuantity(productId, newQuantity){
     if(!response.ok) throw new Error('Не вдалося оновити залишок товару');
     return await response.json();
 }
+export function updateCartCounter(){
+    const cart= JSON.parse(localStorage.getItem('cart')) || [];
+    const totalItems= cart.reduce(
+        (sum, item)=>sum+ (parseInt(item.quantity) || 0),
+        0
+    );
+    const counters= ['cart-count', 'cart-count-nav'];
+    counters.forEach(id=>{
+        const el= document.getElementById(id);
+        if(el) el.textContent= totalItems;
+    });
+}
+import* as ui from './ui.js';
+export async function loadRecentProducts(){
+    try{
+        const products= await getProducts();
+        if(!products || !Array.isArray(products)) return;
+        const latest= products.slice(-4).reverse();
+        ui.renderRecentActions('recent-actions', latest);
+    } catch(err){
+        console.error("Не вдалося завантажити останні товари:", err);
+        const container= document.getElementById('recent-actions');
+        if(container){
+            container.innerHTML=
+                '<p style="color: #6A6A89; width: 100%; text-align: center;">Не вдалося завантажити новинки</p>';
+        }
+    }
+}
